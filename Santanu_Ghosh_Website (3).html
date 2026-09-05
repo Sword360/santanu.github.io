@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Santanu Ghosh — Linux System Administrator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#080C13;
+    --bg-soft:#0D131E;
+    --card:#111927;
+    --card-hover:#141D2D;
+    --border:#1E2836;
+    --ink:#EAEEF6;
+    --muted:#8B95A9;
+    --muted-dim:#5D6678;
+    --accent:#2DD4EE;
+    --accent-2:#3B82F6;
+    --accent-soft:rgba(45,212,238,0.10);
+    --mono:'JetBrains Mono',monospace;
+    --head:'Space Grotesk',sans-serif;
+    --body:'Inter',sans-serif;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+  }
+  a{text-decoration:none;color:inherit;}
+  h1,h2,h3{font-family:var(--head);margin:0;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+
+  /* background texture: dots + faint triangles */
+  .bg-decor{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size:26px 26px;
+    -webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.3) 60%, transparent 100%);
+    mask-image:linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.3) 60%, transparent 100%);
+  }
+  .topbar{
+    position:fixed;top:0;left:0;right:0;height:3px;z-index:100;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  }
+
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(8,12,19,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  nav{
+    max-width:var(--maxw);margin:0 auto;padding:18px 24px;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .brand{
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:16px;
+    color:var(--ink);
+  }
+  .brand .br{color:var(--accent);}
+  .nav-links{display:flex;gap:28px;font-size:13.5px;color:var(--muted);}
+  .nav-links a:hover{color:var(--ink);}
+  .nav-cta{
+    font-family:var(--body);
+    font-size:13px;font-weight:600;
+    color:var(--accent);
+    border:1px solid rgba(45,212,238,0.35);
+    padding:8px 18px;border-radius:6px;
+  }
+  .nav-cta:hover{background:var(--accent-soft);}
+
+  section{position:relative;z-index:1;padding:90px 0;}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--accent);
+    margin-bottom:14px;
+    letter-spacing:0.02em;
+  }
+  .section-heading{
+    font-size:32px;font-weight:700;color:var(--ink);margin-bottom:14px;
+  }
+  .section-sub{
+    font-size:14.5px;color:var(--muted);max-width:560px;line-height:1.7;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{padding:110px 0 60px;}
+  .hero-hi{font-family:var(--mono);font-size:15px;color:var(--muted);margin-bottom:20px;}
+  .hero-hi b{color:var(--accent);font-weight:500;}
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:12.5px;color:var(--ink);
+    background:var(--card);border:1px solid var(--border);
+    padding:7px 16px;border-radius:20px;margin-bottom:34px;
+  }
+  .badge .pulse{
+    width:7px;height:7px;border-radius:50%;background:#34D399;
+    box-shadow:0 0 0 3px rgba(52,211,153,0.18);
+  }
+  .hero h1{
+    font-size:64px;font-weight:700;color:var(--ink);line-height:1;
+    margin-bottom:26px;
+  }
+  .hero p.lead{
+    font-size:15.5px;color:var(--muted);line-height:1.8;max-width:600px;margin-bottom:36px;
+  }
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:56px;}
+  .btn-grad{
+    font-family:var(--body);font-weight:600;font-size:13.5px;
+    color:#04141A;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    padding:13px 26px;border-radius:7px;
+  }
+  .btn-grad:hover{filter:brightness(1.08);}
+  .btn-outline{
+    font-family:var(--body);font-weight:600;font-size:13.5px;
+    color:var(--ink);
+    background:var(--card);
+    border:1px solid var(--border);
+    padding:13px 26px;border-radius:7px;
+  }
+  .btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+  .btn-text{
+    font-family:var(--body);font-weight:600;font-size:13.5px;
+    color:var(--accent);
+    padding:13px 10px;
+  }
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:56px;
+  }
+  .stat-card{
+    background:var(--card);border:1px solid var(--border);border-radius:10px;
+    padding:24px 20px;text-align:center;
+  }
+  .stat-num{
+    font-family:var(--head);font-size:28px;font-weight:700;color:var(--accent);
+  }
+  .stat-label{
+    font-family:var(--mono);font-size:10.5px;color:var(--muted);
+    letter-spacing:0.04em;margin-top:6px;text-transform:uppercase;
+  }
+  .stack-label{font-family:var(--mono);font-size:11.5px;color:var(--muted-dim);margin-bottom:14px;letter-spacing:0.03em;}
+  .stack-row{display:flex;flex-wrap:wrap;gap:10px;}
+  .stack-pill{
+    font-family:var(--mono);font-size:12px;color:var(--ink);
+    background:var(--card);border:1px solid var(--border);
+    padding:7px 14px;border-radius:6px;
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;margin-top:44px;}
+  .about-text p{font-size:14.5px;line-height:1.85;color:var(--muted);margin-bottom:20px;}
+  .about-text b{color:var(--ink);font-weight:600;}
+  .check-list{list-style:none;margin:26px 0 0;padding:0;}
+  .check-list li{
+    display:flex;gap:10px;font-size:13.8px;color:var(--ink);margin-bottom:14px;line-height:1.5;
+  }
+  .check-list li::before{
+    content:"✓";
+    color:var(--accent);font-weight:700;flex:0 0 auto;
+  }
+  .terminal{
+    background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 30px 60px rgba(0,0,0,0.35);
+  }
+  .term-bar{
+    display:flex;align-items:center;gap:8px;
+    padding:12px 16px;border-bottom:1px solid var(--border);
+    font-family:var(--mono);font-size:12px;color:var(--muted);
+  }
+  .term-dot{width:10px;height:10px;border-radius:50%;}
+  .term-body{padding:20px 22px;font-family:var(--mono);font-size:12.5px;line-height:1.85;}
+  .term-body .cmd{color:var(--ink);}
+  .term-body .prompt{color:var(--accent);}
+  .term-body .out{color:var(--muted-dim);}
+  .term-body .ok{color:#34D399;}
+  .term-cursor{
+    display:inline-block;width:7px;height:14px;background:var(--accent);
+    animation:blink 1.1s steps(1) infinite;vertical-align:middle;
+  }
+  @keyframes blink{50%{opacity:0;}}
+
+  /* ---------- SKILLS ---------- */
+  .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
+  .skill-card{
+    background:var(--card);border:1px solid var(--border);border-radius:10px;
+    padding:26px;transition:border-color .15s;
+  }
+  .skill-card:hover{border-color:rgba(45,212,238,0.35);}
+  .skill-icon{
+    width:42px;height:42px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--accent-soft);color:var(--accent);
+    margin-bottom:18px;
+  }
+  .skill-title{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:10px;}
+  .skill-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:16px;}
+  .skill-tags{display:flex;flex-wrap:wrap;gap:7px;}
+  .skill-tag{
+    font-family:var(--mono);font-size:11px;color:var(--accent);
+    background:var(--accent-soft);border:1px solid rgba(45,212,238,0.2);
+    padding:4px 10px;border-radius:5px;
+  }
+
+  /* ---------- EXPERIENCE ---------- */
+  .timeline{margin-top:44px;position:relative;padding-left:32px;}
+  .timeline::before{
+    content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1.5px;
+    background:var(--border);
+  }
+  .tl-item{position:relative;margin-bottom:44px;}
+  .tl-item:last-child{margin-bottom:0;}
+  .tl-dot{
+    position:absolute;left:-32px;top:4px;width:12px;height:12px;border-radius:50%;
+    background:var(--bg);border:2px solid var(--accent);
+  }
+  .tl-card{
+    background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px 26px;
+  }
+  .tl-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:baseline;}
+  .tl-title{font-size:16.5px;font-weight:600;color:var(--ink);}
+  .tl-date{
+    font-family:var(--mono);font-size:11.5px;color:var(--accent);
+    background:var(--accent-soft);padding:4px 12px;border-radius:5px;white-space:nowrap;
+  }
+  .tl-org{font-size:13px;color:var(--muted);margin:5px 0 16px;}
+  .tl-card ul{margin:0;padding-left:18px;}
+  .tl-card li{font-size:13.3px;line-height:1.75;color:var(--muted);margin-bottom:7px;}
+  .tl-card li::marker{color:var(--accent);}
+
+  /* ---------- PROJECTS ---------- */
+  .projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:44px;}
+  .project-card{
+    background:var(--card);border:1px solid var(--border);border-radius:10px;padding:28px;
+  }
+  .project-title{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .project-title .ptag{
+    font-family:var(--mono);font-size:10.5px;color:var(--accent);
+    background:var(--accent-soft);padding:3px 9px;border-radius:4px;
+  }
+  .project-card ul{margin:0;padding-left:18px;}
+  .project-card li{font-size:13.2px;line-height:1.75;color:var(--muted);margin-bottom:7px;}
+  .project-card li::marker{color:var(--accent);}
+
+  /* ---------- CERTS + EDU ---------- */
+  .cred-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px;}
+  .cred-card{
+    background:var(--card);border:1px solid var(--border);border-radius:10px;
+    padding:20px;display:flex;gap:14px;align-items:flex-start;
+  }
+  .cred-badge{
+    width:44px;height:44px;border-radius:8px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-weight:700;font-size:12.5px;color:#fff;
+  }
+  .cred-name{font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.4;margin-bottom:5px;}
+  .cred-meta{font-family:var(--mono);font-size:11px;color:var(--muted-dim);}
+  .edu-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px;}
+  .edu-card{
+    background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;
+  }
+  .edu-year{font-family:var(--mono);font-size:11.5px;color:var(--accent);margin-bottom:10px;}
+  .edu-degree{font-size:13.8px;font-weight:600;color:var(--ink);line-height:1.4;margin-bottom:6px;}
+  .edu-school{font-size:12px;color:var(--muted);}
+
+  /* ---------- CONTACT ---------- */
+  .contact-card{
+    background:var(--card);border:1px solid var(--border);border-radius:14px;
+    padding:56px 60px;position:relative;overflow:hidden;
+  }
+  .contact-card .section-heading{font-size:30px;}
+  .contact-card .section-sub{max-width:600px;margin-bottom:0;}
+  .contact-line{
+    font-family:var(--mono);font-size:14px;color:var(--accent);
+    margin-top:26px;display:flex;gap:26px;flex-wrap:wrap;
+  }
+  .contact-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px;}
+  .btn-icon{display:inline-flex;align-items:center;gap:9px;}
+
+  footer{
+    border-top:1px solid var(--border);
+    padding:24px;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+    font-family:var(--mono);font-size:11.5px;color:var(--muted-dim);
+    position:relative;z-index:1;
+  }
+  footer .status-ok{color:#34D399;}
+
+  @media (max-width:900px){
+    .about-grid,.skills-grid,.projects-grid,.cred-grid,.edu-grid{grid-template-columns:1fr;}
+    .stat-grid{grid-template-columns:1fr 1fr;}
+    .nav-links{display:none;}
+    .hero h1{font-size:44px;}
+  }
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+<div class="bg-decor"></div>
+
+<header>
+  <nav>
+    <div class="brand">&lt;<span class="br">Santanu</span>/&gt;</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#credentials">Credentials</a>
+    </div>
+    <a class="nav-cta" href="mailto:santanughosh3304@gmail.com">Contact</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-hi">Hi, I'm <b>Santanu Ghosh</b></div>
+    <div class="badge"><span class="pulse"></span>RHCSA · AWS SAA · AZ-900 · West Bengal, India</div>
+    <h1>System Administrator</h1>
+    <p class="lead">
+      RHCSA-certified Linux System Administrator with experience across RHEL, Ubuntu, AWS,
+      and Azure — managing production infrastructure, automating with Ansible, and keeping
+      systems patched, monitored, and highly available.
+    </p>
+    <div class="hero-actions">
+      <a class="btn-grad" href="#projects">View Projects</a>
+      <a class="btn-outline" href="#" onclick="return false;">Download Resume</a>
+      <a class="btn-text" href="mailto:santanughosh3304@gmail.com">Get in Touch →</a>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-num">1.5+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Cloud Certifications</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">9+</div>
+        <div class="stat-label">AWS Services Used</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">2</div>
+        <div class="stat-label">Production Environments</div>
+      </div>
+    </div>
+
+    <div class="stack-label">CORE STACK</div>
+    <div class="stack-row">
+      <span class="stack-pill">RHEL</span>
+      <span class="stack-pill">Ubuntu</span>
+      <span class="stack-pill">AWS</span>
+      <span class="stack-pill">Azure</span>
+      <span class="stack-pill">Ansible</span>
+      <span class="stack-pill">Semaphore</span>
+      <span class="stack-pill">Grafana</span>
+      <span class="stack-pill">Zabbix</span>
+      <span class="stack-pill">Proxmox</span>
+      <span class="stack-pill">Shell</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="eyebrow">01 — About</div>
+    <h2 class="section-heading">Infrastructure-first mindset</h2>
+    <p class="section-sub">The best day on the job is the one where nothing breaks — because it was patched, monitored, and automated ahead of time.</p>
+
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          I'm a <b>Linux System Administrator</b> based in West Bengal, with hands-on experience
+          managing production environments across <b>RHEL, Ubuntu, AWS, and Azure</b>. My work centers
+          on server administration, cloud infrastructure, networking, security, and troubleshooting.
+        </p>
+        <p>
+          I specialize in <b>Linux administration</b>, <b>configuration management with Ansible
+          and Semaphore</b>, and <b>monitoring</b> with Grafana, Zabbix, and Observium — backed by
+          RHCSA, AWS Solutions Architect – Associate, and AZ-900 certifications.
+        </p>
+        <ul class="check-list">
+          <li>Managed AWS S3, EC2, and backup/disaster-recovery operations in production</li>
+          <li>Automated server provisioning and patching with Ansible &amp; Semaphore</li>
+          <li>Ran monitoring stacks (Grafana, Zabbix, Observium) across Linux fleets</li>
+        </ul>
+      </div>
+
+      <div class="terminal">
+        <div class="term-bar">
+          <span class="term-dot" style="background:#FF5F56;"></span>
+          <span class="term-dot" style="background:#FFBD2E;"></span>
+          <span class="term-dot" style="background:#27C93F;"></span>
+          <span style="margin-left:8px;">santanu@prod-server — bash</span>
+        </div>
+        <div class="term-body">
+          <div><span class="prompt">$</span> <span class="cmd">ansible-playbook patch-deploy.yml</span></div>
+          <div class="out">PLAY RECAP *************************</div>
+          <div class="out">web-01 : <span class="ok">ok=16</span>  changed=5  failed=0</div>
+          <div class="out">web-02 : <span class="ok">ok=16</span>  changed=5  failed=0</div>
+          <div>&nbsp;</div>
+          <div><span class="prompt">$</span> <span class="cmd">aws s3 ls s3://prod-backups/ --recursive | tail -2</span></div>
+          <div class="out">2026-09-04  02:10  db-snapshot-0904.tar.gz</div>
+          <div class="out">2026-09-05  02:10  db-snapshot-0905.tar.gz</div>
+          <div>&nbsp;</div>
+          <div><span class="prompt">$</span> <span class="cmd">systemctl status zabbix-agent</span></div>
+          <div class="out">● zabbix-agent.service — <span class="ok">active (running)</span></div>
+          <div><span class="prompt">$</span> <span class="term-cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" style="background:var(--bg-soft);">
+  <div class="wrap">
+    <div class="eyebrow">02 — Skills</div>
+    <h2 class="section-heading">Technology expertise</h2>
+    <p class="section-sub">Tools and platforms from production environments — cloud, automation, monitoring, and networking.</p>
+
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="skill-title">Linux Administration</div>
+        <div class="skill-desc">RHCSA-certified server administration, user/permission management, LVM, patching, and log analysis across RHEL and Ubuntu.</div>
+        <div class="skill-tags">
+          <span class="skill-tag">RHEL</span><span class="skill-tag">Ubuntu</span>
+          <span class="skill-tag">LVM</span><span class="skill-tag">SELinux</span>
+          <span class="skill-tag">iptables</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-icon" style="background:rgba(251,191,36,0.12);color:#FBBF24;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="skill-title">AWS &amp; Azure</div>
+        <div class="skill-desc">Multi-cloud foundations — EC2, S3, VPC, IAM, and Auto Scaling on AWS; VMs, AD, and ARM/Bicep on Azure.</div>
+        <div class="skill-tags">
+          <span class="skill-tag">EC2</span><span class="skill-tag">S3</span>
+          <span class="skill-tag">IAM</span><span class="skill-tag">Azure VM</span>
+          <span class="skill-tag">ARM/Bicep</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="6" rx="1"/><rect x="4" y="14" width="16" height="6" rx="1"/><circle cx="8" cy="7" r="0.6" fill="currentColor"/><circle cx="8" cy="17" r="0.6" fill="currentColor"/></svg>
+        </div>
+        <div class="skill-title">Virtualization</div>
+        <div class="skill-desc">Proxmox VE, VMware, and Hyper-V administration for VM lifecycle management and resource optimization.</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Proxmox VE</span><span class="skill-tag">VMware</span><span class="skill-tag">Hyper-V</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+        </div>
+        <div class="skill-title">Automation &amp; Config Mgmt</div>
+        <div class="skill-desc">Ansible playbooks and Semaphore for centralized, role-based provisioning, patching, and reporting.</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Ansible</span><span class="skill-tag">Semaphore</span><span class="skill-tag">Cron</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+        </div>
+        <div class="skill-title">Monitoring</div>
+        <div class="skill-desc">Real-time dashboards and alerting across Linux fleets with Grafana, Zabbix, and Observium.</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Grafana</span><span class="skill-tag">Zabbix</span><span class="skill-tag">Observium</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6-4-9s1.5-6.3 4-9z"/></svg>
+        </div>
+        <div class="skill-title">Networking &amp; Windows Server</div>
+        <div class="skill-desc">TCP/IP, DNS/DHCP, VLANs, and firewalls, plus Windows Server AD DS, GPO, and FSMO role management.</div>
+        <div class="skill-tags">
+          <span class="skill-tag">DNS/DHCP</span><span class="skill-tag">VLAN</span><span class="skill-tag">AD DS</span><span class="skill-tag">GPO</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="wrap">
+    <div class="eyebrow">03 — Experience</div>
+    <h2 class="section-heading">Where I've worked</h2>
+    <p class="section-sub">From enterprise network installs to production system administration in fintech.</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-head">
+            <div class="tl-title">Associate System Administrator</div>
+            <div class="tl-date">Feb 2026 – Present</div>
+          </div>
+          <div class="tl-org">mPokket Financial Services Private Limited</div>
+          <ul>
+            <li>Manage AWS S3 storage, EC2 instances, backup operations, and disaster recovery processes.</li>
+            <li>Debug production failures and perform root cause analysis to improve system reliability.</li>
+            <li>Manage Zimbra mail administration, including user accounts and mail troubleshooting.</li>
+            <li>Configure and monitor Grafana, Observium, and Zabbix dashboards; maintain NTP sync across Linux servers.</li>
+            <li>Automate server provisioning and configuration management using Ansible and Semaphore.</li>
+            <li>Monitor patching status, handle failed/unreachable systems, and maintain centralized reporting.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-head">
+            <div class="tl-title">Network Support Engineer</div>
+            <div class="tl-date">Jan 2025 – Feb 2026</div>
+          </div>
+          <div class="tl-org">Jupiter Computers (Client: IIT Kharagpur)</div>
+          <ul>
+            <li>Assisted in a large-scale network installation project at IIT KGP (Phase 3).</li>
+            <li>Configured and troubleshot enterprise switches and routers.</li>
+            <li>Installed, configured, and managed Linux production servers, ensuring uptime and performance.</li>
+            <li>Administered Windows Server, including Active Directory, DNS, DHCP, and Group Policy.</li>
+            <li>Performed backup/restore, endpoint security, and firewall configuration.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" style="background:var(--bg-soft);">
+  <div class="wrap">
+    <div class="eyebrow">04 — Projects</div>
+    <h2 class="section-heading">Things I've built</h2>
+    <p class="section-sub">Infrastructure work outside the day job — scaling web apps and automating server fleets.</p>
+
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-title">Scalable Web App Hosting on AWS <span class="ptag">AWS</span></div>
+        <ul>
+          <li>Deployed a web app on EC2 with EBS storage, automated via User Data scripts.</li>
+          <li>Built reusable AMIs and Launch Templates for standardized deployments.</li>
+          <li>Configured Auto Scaling Groups, CloudWatch policies, and an ALB for high availability.</li>
+          <li>Integrated a custom domain via Route 53 and validated scaling and health checks.</li>
+        </ul>
+      </div>
+      <div class="project-card">
+        <div class="project-title">Infrastructure Automation <span class="ptag">Ansible</span></div>
+        <ul>
+          <li>Developed Ansible playbooks for automated Linux server configuration.</li>
+          <li>Managed centralized automation workflows through Semaphore.</li>
+          <li>Configured mDNS for hostname-based access and passwordless SSH.</li>
+          <li>Automated patching with centralized status monitoring via Grafana.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CREDENTIALS -->
+<section id="credentials">
+  <div class="wrap">
+    <div class="eyebrow">05 — Certifications &amp; Education</div>
+    <h2 class="section-heading">Credentials &amp; learning</h2>
+    <p class="section-sub">Validated expertise across Linux, cloud, and Microsoft platforms.</p>
+
+    <div class="cred-grid">
+      <div class="cred-card">
+        <div class="cred-badge" style="background:#C0392B;">RH</div>
+        <div>
+          <div class="cred-name">Red Hat Certified System Administrator</div>
+          <div class="cred-meta">ID: 250-186-616 · Dec 2025</div>
+        </div>
+      </div>
+      <div class="cred-card">
+        <div class="cred-badge" style="background:#B7791F;">AWS</div>
+        <div>
+          <div class="cred-name">AWS Certified Solutions Architect – Associate</div>
+          <div class="cred-meta">Amazon Web Services · Aug 2026</div>
+        </div>
+      </div>
+      <div class="cred-card">
+        <div class="cred-badge" style="background:#2563EB;">AZ</div>
+        <div>
+          <div class="cred-name">Microsoft Certified: Azure Fundamentals</div>
+          <div class="cred-meta">ID: wLcM-Fa44 · Apr 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="edu-grid">
+      <div class="edu-card">
+        <div class="edu-year">2023 – 2025</div>
+        <div class="edu-degree">M.Sc. Advanced Networking &amp; Cyber Security</div>
+        <div class="edu-school">Brainware University · 84%</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-year">2020 – 2023</div>
+        <div class="edu-degree">B.Sc. Advanced Networking &amp; Cyber Security</div>
+        <div class="edu-school">Brainware University · 82%</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-year">2020</div>
+        <div class="edu-degree">Higher Secondary (WBCHSE)</div>
+        <div class="edu-school">Bibhishanpur High School · 86%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-card">
+      <div class="eyebrow">06 — Contact</div>
+      <h2 class="section-heading">Let's build reliable infrastructure together</h2>
+      <p class="section-sub">Open to Linux Administrator, Cloud Engineer, and DevOps roles. Based in West Bengal, India.</p>
+      <div class="contact-line">
+        <a href="mailto:santanughosh3304@gmail.com">santanughosh3304@gmail.com</a>
+        <a href="tel:+918927652781">+91 89276 52781</a>
+      </div>
+      <div class="contact-actions">
+        <a class="btn-grad btn-icon" href="mailto:santanughosh3304@gmail.com">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
+          Email Me
+        </a>
+        <a class="btn-outline btn-icon" href="#" onclick="return false;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+          Resume PDF
+        </a>
+        <a class="btn-outline btn-icon" href="https://www.linkedin.com/in/santanughosh3304" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05C19.6 8 21 10.05 21 13.4V23h-4v-8.7c0-2.08-.04-4.75-2.9-4.75-2.9 0-3.35 2.27-3.35 4.6V23h-4V8z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Santanu Ghosh · Linux System Administrator · West Bengal, India</span>
+  <span>status: <span class="status-ok">operational</span></span>
+</footer>
+
+</body>
+</html>
