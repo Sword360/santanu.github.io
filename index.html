@@ -19,10 +19,27 @@
     --accent:#2DD4EE;
     --accent-2:#3B82F6;
     --accent-soft:rgba(45,212,238,0.10);
+    --btn-text:#04141A;
+    --header-bg:rgba(8,12,19,0.85);
     --mono:'JetBrains Mono',monospace;
     --head:'Space Grotesk',sans-serif;
     --body:'Inter',sans-serif;
     --maxw:1120px;
+  }
+  [data-theme="light"] {
+    --bg:#F8FAFC;
+    --bg-soft:#F1F5F9;
+    --card:#FFFFFF;
+    --card-hover:#F8FAFC;
+    --border:#E2E8F0;
+    --ink:#0F172A;
+    --muted:#475569;
+    --muted-dim:#64748B;
+    --accent:#0284C7;
+    --accent-2:#2563EB;
+    --accent-soft:rgba(2,132,199,0.15);
+    --btn-text:#FFFFFF;
+    --header-bg:rgba(255,255,255,0.85);
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -38,16 +55,20 @@
   h1,h2,h3{font-family:var(--head);margin:0;}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
 
-  /* background texture: dots + faint triangles */
-  .bg-decor{
-    position:fixed;
-    inset:0;
-    z-index:0;
-    pointer-events:none;
-    background-image:radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
-    background-size:26px 26px;
-    -webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.3) 60%, transparent 100%);
-    mask-image:linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.3) 60%, transparent 100%);
+  /* background texture: animated grid */
+  .bg-anim-container {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: var(--bg);
+    transition: background 0.3s ease;
+  }
+  #tsparticles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
   }
   .topbar{
     position:fixed;top:0;left:0;right:0;height:3px;z-index:100;
@@ -56,7 +77,7 @@
 
   header{
     position:sticky;top:0;z-index:50;
-    background:rgba(8,12,19,0.85);
+    background:var(--header-bg);
     backdrop-filter:blur(10px);
     border-bottom:1px solid var(--border);
   }
@@ -81,6 +102,37 @@
     padding:8px 18px;border-radius:6px;
   }
   .nav-cta:hover{background:var(--accent-soft);}
+
+  .theme-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    border-radius: 6px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .theme-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .theme-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+  #theme-icon-moon { display: none; }
+  [data-theme="light"] #theme-icon-sun { display: none; }
+  [data-theme="light"] #theme-icon-moon { display: block; }
+  
+  .nav-right {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
 
   section{position:relative;z-index:1;padding:90px 0;}
   .eyebrow{
@@ -121,7 +173,7 @@
   .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:56px;}
   .btn-grad{
     font-family:var(--body);font-weight:600;font-size:13.5px;
-    color:#04141A;
+    color:var(--btn-text);
     background:linear-gradient(90deg,var(--accent),var(--accent-2));
     padding:13px 26px;border-radius:7px;
   }
@@ -312,7 +364,9 @@
 </head>
 <body>
 <div class="topbar"></div>
-<div class="bg-decor"></div>
+<div class="bg-anim-container">
+  <div id="tsparticles"></div>
+</div>
 
 <header>
   <nav>
@@ -324,7 +378,25 @@
       <a href="#projects">Projects</a>
       <a href="#credentials">Credentials</a>
     </div>
-    <a class="nav-cta" href="mailto:santanughosh3304@gmail.com">Contact</a>
+    <div class="nav-right">
+      <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
+        <svg id="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg id="theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+      <a class="nav-cta" href="mailto:santanughosh3304@gmail.com">Contact</a>
+    </div>
   </nav>
 </header>
 
@@ -676,5 +748,80 @@
   <span>status: <span class="status-ok">operational</span></span>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.0.6/tsparticles.slim.bundle.min.js"></script>
+<script>
+  const themeToggleBtn = document.getElementById('theme-toggle');
+  const currentTheme = localStorage.getItem('theme') || 
+                       (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+                       
+  if (currentTheme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+
+  let particlesContainer;
+  const loadParticles = () => {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    tsParticles.load("tsparticles", {
+      fpsLimit: 60,
+      interactivity: {
+        events: {
+          onHover: { enable: true, mode: "grab" },
+          resize: true
+        },
+        modes: {
+          grab: { distance: 160, links: { opacity: 0.6 } }
+        }
+      },
+      particles: {
+        color: { value: isLight ? "#0284C7" : "#2DD4EE" },
+        links: {
+          color: isLight ? "#2563EB" : "#3B82F6",
+          distance: 140,
+          enable: true,
+          opacity: 0.4,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 1.2,
+          direction: "none",
+          outModes: { default: "bounce" }
+        },
+        number: {
+          density: { enable: true, area: 800 },
+          value: 70
+        },
+        opacity: { value: 0.6 },
+        shape: { type: "circle" },
+        size: { value: { min: 1, max: 3 } }
+      },
+      detectRetina: true
+    }).then(container => {
+      particlesContainer = container;
+    });
+  };
+
+  loadParticles();
+
+  themeToggleBtn.addEventListener('click', () => {
+    let theme = document.documentElement.getAttribute('data-theme');
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    
+    if (newTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+    localStorage.setItem('theme', newTheme);
+    
+    // Update particle colors live without fully reloading
+    if (particlesContainer) {
+      const isLight = newTheme === 'light';
+      particlesContainer.options.particles.color.value = isLight ? "#0284C7" : "#2DD4EE";
+      particlesContainer.options.particles.links.color.value = isLight ? "#2563EB" : "#3B82F6";
+      particlesContainer.refresh();
+    }
+  });
+</script>
 </body>
 </html>
